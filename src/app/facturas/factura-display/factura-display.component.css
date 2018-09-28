@@ -1,0 +1,24 @@
+.factura-cambio{
+	height: 25px;
+    width: 75px;
+    text-align: center;
+}
+
+.action .icon svg {
+    height: 18px;
+    top: 4px;
+    position: absolute;
+}
+
+.delete{
+	padding-top: 2px;
+}
+
+.action {
+    margin-bottom: 11px;
+}
+
+.ver-producto:hover{
+	text-decoration: underline;
+	cursor: pointer;
+}

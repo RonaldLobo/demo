@@ -1,0 +1,477 @@
+<main role="main" class="col-md-10 ml-sm-auto col-lg-10 pt-3 px-4">
+	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+		<h1 class="h2">Factura</h1>
+		<div>
+			<span class="client-display">
+				Cliente: 
+			</span>
+			<span class="client-display" *ngIf="factura.comprador.nombre != ''">
+				{{factura.comprador.nombre}} {{factura.comprador.apellido1}} - {{factura.comprador.cedula}} <span (click)="seleccionarCliente(template)" class="client-display no-client" *ngIf="factura.estado != 'completa' && factura.estado != 'enviada' && factura.estado != 'rechazada'"><span>Cambiar Cliente</span></span>
+			</span>
+			<span class="client-display no-client" *ngIf="factura.comprador.nombre == ''">
+				Factura sin cliente <span (click)="seleccionarCliente(template)" *ngIf="factura.estado != 'completa' && factura.estado != 'enviada' && factura.estado != 'rechazada'">Seleccionar Cliente</span>
+			</span>
+		</div>
+		<div class="btn-toolbar mb-2 mb-md-0" >
+			<span *ngIf="guardado">Guardado </span>
+			<div class="btn-group mr-2" *ngIf="factura.estado != 'completa' && factura.estado != 'enviada'  && factura.estado != 'rechazada'">
+				<button class="btn btn-sm btn-outline-secondary" (click)="guardar('pendiente',agotadosPop)">Guardar</button>
+				<button class="btn btn-sm btn-outline-secondary" (click)="confirmar(completarPop)">Completar</button>
+			</div>
+	        <span class="client-display" *ngIf="factura.estado == 'completa'">
+	        	Factura Completa
+	        </span>
+	        <span class="client-display" *ngIf="factura.estado == 'rechazada'">
+	        	Factura Rechazada
+	        </span>
+	        <div class="btn-group mr-2" *ngIf="factura.estado == 'enviada'">
+				<button class="btn btn-sm btn-outline-secondary" (click)="reenviarMH(agotadosPop)">
+					<span *ngIf="!enviandoMH">Reenviar</span>
+					<span *ngIf="enviandoMH">Enviando...</span>
+				</button>
+			</div>
+		</div>
+	</div>
+	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap pb-2 mb-3 products row">
+		<div class="col-12 col-md-8 products-list order-2 order-md-1">
+			<!-- <perfect-scrollbar style="max-width: 600px; max-height: 400px;"> -->
+				<ul class="col-12 items-list">
+					<li>
+						<div class="col-12 row">
+							<div class="col-6 col-sm-2">
+								<p>Producto</p>
+							</div>
+							<div class="col-2 text-center d-none d-sm-block">
+								<p>Precio</p>
+							</div>
+							<div class="col-2 text-center d-none d-sm-block">
+								<p>Cantidad</p>
+							</div>
+							<div class="col-2 text-center d-none d-sm-block">
+								<p>Descuento </p>
+							</div>
+							<div class="col-2 text-center d-none d-sm-block">
+								<p>Tipo Desc</p>
+							</div>
+							<div class="col-6 col-sm-2 text-center">
+								<p>Accion</p>
+							</div>
+						</div>
+					</li>
+				</ul>
+				<ul class="col-12 items-list list-products">
+					<li *ngFor="let pfi of factura.productos; index as i" class="" [class.pair]="i%2==0">
+						<app-factura-display [productofacturaitem]='pfi' (borrarProd)="eliminarProd($event)" (editarFactura)="editarFactura($event)" (actualizarLista)="actualizarLista($event)" [index]="i" [estado]="factura.estado" class=""></app-factura-display>
+					</li>
+				</ul>
+			<!-- </perfect-scrollbar> -->
+		</div>
+		<div class="col-12 col-md-4 order-1 order-md-2" style="padding-right:0;">
+			<div class="col-12 row totales">
+				<!-- <div class="col-12 row item">
+					<div class="col-8">
+						Descuento
+					</div>
+					<div class="col-4 text-right">
+						<input type="number" name="descuento" class="factura-cambio" [(ngModel)]="factura.descuento" (focusout)="fueraDescuento()" [disabled]="factura.estado == 'completa'  || factura.estado == 'enviada'" style="width: 80%; padding: 0;">
+					</div>
+				</div>
+				<div class="col-12 row item">
+					<div class="col-8">
+						Tipo de descuento
+					</div>
+					<div class="col-4 text-right">
+						<select [(ngModel)]="factura.descuento_tipo" name="descuento_tipo" class="form-control small-select" (change)="actualizaTotal()" [disabled]="factura.estado == 'completa'  || factura.estado == 'enviada'" style="width: 80%; padding: 0;"> 
+						    <option value="1">Colones</option>
+						    <option value="2">%</option>
+						</select>
+					</div>
+				</div> -->
+				<div class="col-12 row item">
+					<div class="col-8">
+						Descuentos
+					</div>
+					<div class="col-4 text-right">
+						{{totalDescuentos() | number:'1.2-2'}}
+					</div>
+				</div>
+				<div class="col-12 row item">
+					<div class="col-8">
+						Total sin Impuestos
+					</div>
+					<div class="col-4 text-right">
+						{{totalVentasNeto() | number:'1.2-2'}}
+					</div>
+				</div>
+				<div class="col-12 row item ultimo">
+					<div class="col-8">
+						Impuestos
+					</div>
+					<div class="col-4 text-right">
+						{{totalImpuestos() | number:'1.2-2'}}
+					</div>
+				</div>
+				<div class="col-12 row item">
+					<div class="col-8">
+						Total
+					</div>
+					<div class="col-4 text-right">
+						{{totalComprobante() | number:'1.2-2'}}
+					</div>
+				</div>
+			</div>
+			<div class="col-12 row totales card" style="margin-top: 40px;" *ngIf="factura.estado == 'completa' || factura.estado == 'enviada'">
+				<div class="col-12 row item">
+					<div class="col-7">
+						Fecha Completada
+					</div>
+					<div class="col-5 text-right">
+						{{factura.fecha_modificada | date:'dd/MM/yyyy, h:mm:ss a'}}
+					</div>
+				</div>
+				<div class="col-12 row item">
+					<div class="col-7">
+						Tipo de pago
+					</div>
+					<div class="col-5 text-right">
+						<span *ngIf="factura.tipo_de_pago == 'efectivo'">
+							Efectivo
+						</span>
+						<span *ngIf="factura.tipo_de_pago == 'tarjeta'">
+							Tarjeta
+						</span>
+						<span *ngIf="factura.tipo_de_pago == 'notacredito'">
+							Nota de Credito
+						</span>
+					</div>
+				</div>
+				<div class="col-12 row item" *ngIf="factura.tipo_de_pago == 'tarjeta'">
+					<div class="col-7">
+						Comprobante
+					</div>
+					<div class="col-5 text-right">
+						{{factura.comprobante}}
+					</div>
+				</div>
+				<div class="col-12 row item">
+					<div class="col-7">
+						Imprimir factura
+					</div>
+					<div class="col-5 text-right">
+						<p class="action">
+							<button class="btn btn-sm btn-outline-secondary" (click)="openModalPrint(print)" tooltip="Imprimir factura." style="color: black;">
+								<span class="icon">
+					          		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></g></svg>
+					          	</span>
+					          	<span class="label">
+					          		Imprimir
+					        	</span>
+					        </button>
+				        </p>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 row" style="margin-top: 50px;padding-right:0;" [class.invisible]="factura.estado == 'completa'  || factura.estado == 'enviada' || factura.estado == 'rechazada'">
+				<div class="col-6 row no-gutters">
+					<div class="col-12">
+						Codigo
+					</div>
+					<div class="col-12">
+						<input type="text" name="txtCodigo" id="buscarPorCodigo" [(ngModel)]="codigo" (ngModelChange)="changedCodigo()" placeholder="Buscar por código" tabindex="1" [disabled]="factura.estado == 'completa' || factura.estado == 'enviada' || factura.estado == 'rechazada'">
+					</div>
+				</div>
+				<div class="col-6 row no-gutters">
+					<div class="col-12">
+						Producto
+					</div>
+					<div class="col-12">
+						<input type="text" name="txtProducto" [(ngModel)]="nombreProducto" (ngModelChange)="changedNombre()" placeholder="Buscar por Nombre" tabindex="2" [disabled]="factura.estado == 'completa' || factura.estado == 'enviada' || factura.estado == 'rechazada'">
+					</div>
+				</div>
+			</div>
+			<div class="col-12 row" style="padding-right:0;">
+				<ul class="search-results col-12" *ngIf="productos.length > 0">
+					<li class="col-12">
+						<div class="row">
+							<div class="col-4 col-lg-3">
+								Código
+							</div>
+							<div class="col-4 col-lg-3">
+								Nombre
+							</div>
+							<div class="col-3 d-none d-lg-block">
+								Marca
+							</div>
+							<div class="col-4 col-lg-3">
+								Acción
+							</div>
+						</div>
+					</li>
+					<li *ngFor="let prod of productos; index as i" class="col-12">
+						<div class="row">
+							<div class="col-4 col-lg-3">
+								{{prod.codigo}}
+							</div>
+							<div class="col-4 col-lg-3">
+								{{prod.nombre}} 
+							</div>
+							<div class="col-3 stay-in-box d-none d-lg-block" tooltip="{{prod.marca}}">
+								{{prod.marca}} 
+							</div>
+							<div class="col-4 col-lg-3 stay-in-box">
+								<button class="btn btn-link seleccionar" (click)="seleccionarProd(prod)" tabindex="{{i+3}}">Seleccionar</button> 
+							</div>
+						</div>
+					</li>
+				</ul>
+				<p *ngIf="buscando && productos.length == 0">
+					
+				</p>
+			</div>
+		</div>
+		
+	</div>
+</main>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" style="text-transform: capitalize;">Seleccionar Cliente</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+  	<div class="col-12" style="border-bottom: 1px solid black;padding-bottom:  27px;">
+  		<div class="row">
+			<div class="col-5 row">
+				<div class="col-12">
+					Nombre
+				</div>
+				<div class="col-12">
+					<input type="text" name="txtCodigo" id="buscarPorCodigo" [(ngModel)]="nombreCliente" (ngModelChange)="changedNombreCliente()" placeholder="Buscar por nombre">
+				</div>
+			</div>
+			<div class="col-5 row">
+				<div class="col-12">
+					Cedula
+				</div>
+				<div class="col-12">
+					<input type="text" name="txtProducto" [(ngModel)]="cedulaCliente" (ngModelChange)="changedCedula()" placeholder="Buscar por Cedula">
+				</div>
+			</div>
+			<div class="col-2 row">
+				<div class="col-12">
+					<span class="client-display no-client" (click)="openModalAgregar(clienteAgregar)"><span>Nuevo Cliente</span></span>
+				</div>
+			</div>
+		</div>
+	</div>
+    <ul class="col-12 items-list">
+		<li>
+			<div class="col-12 row">
+				<div class="col-4">
+					<p>Nombre</p>
+				</div>
+				<div class="col-3 text-center">
+					<p>Cedula</p>
+				</div>
+				<div class="col-5 text-center">
+					<p>
+						Acciones
+			        </p>
+				</div>
+			</div>
+		</li>
+		<li *ngFor="let cliente of clientes; index as i" class="" [class.pair]="i%2==0">
+			<div class="col-12 row">
+				<div class="col-4">
+					<p>{{cliente.nombre}} {{cliente.apellido1}}</p>
+				</div>
+				<div class="col-3 text-center">
+					<p>{{cliente.cedula}}</p>
+				</div>
+				<div class="col-5 text-center">
+					<p class="action">
+						<button class="btn btn-sm btn-outline-secondary" (click)="seleccionarClient(cliente)" tooltip="Seleccionar cliente.">
+							<span class="icon">
+				          		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2l4 4L7 17H3v-4L14 2z"/><path d="M3 22h18"/></g></svg>
+				          	</span>
+				          	<span class="label">
+				          		Seleccionar
+				        	</span>
+				        </button>
+			        </p>
+				</div>
+			</div>
+		</li>
+	</ul>
+  </div>
+</ng-template>
+
+<ng-template #print>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" style="text-transform: capitalize;">Imprimir</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="printRefCompletar.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+  	<div class="text-center">
+  		<p>Seleccione el tipo de factura a imprimir</p>
+  	</div>
+    <div class="col-12">
+    	<div class="row" style="padding-bottom: 35px;">
+    		<div class="col-5 card" (click)="imprimir('pdv')">
+    			<p class="text-center">
+    				Impresora punto de venta.
+    			</p>
+    			<p class="text-center">
+    				<img src="assets/pdv.png" style="width: 178px;">
+    			</p>
+    		</div>
+    		<div class="col-5 offset-2 card" (click)="imprimir('A4')">
+    			<p class="text-center">
+    				Hoja A4
+    			</p>
+    			<p class="text-center">
+    				<img src="assets/a4.jpg" style="width: 131px;">
+    			</p>
+    		</div>
+    	</div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #agotadosPop>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Productos agotados o insuficientes</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="agotadosRefCompletar.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+  	<div class="text-center">
+  		<p>Los siguientes productos se encuentran agotados o son insuficientes para su compra.</p>
+  	</div>
+    <div class="col-12">
+    	<ul>
+    		<li class="row agotado-item">
+    			<div class="col-3">
+    				Codigo 
+    			</div>
+    			<div class="col-3"> 
+    				Nombre
+    			</div>
+    			<div class="col-3"> 
+    				Marca
+    			</div>
+    			<div class="col-3"> 
+    				Cant Disp
+    			</div>
+			</li>
+    		<li *ngFor="let agotado of agotados" class="row agotado-item">
+    			<div class="col-3">
+    				{{agotado.producto.codigo}}  
+    			</div>
+    			<div class="col-3"> 
+    				{{agotado.producto.nombre}}
+    			</div>
+    			<div class="col-3"> 
+    				{{agotado.producto.marca}}
+    			</div>
+    			<div class="col-3"> 
+    				{{agotado.cantidadDisponible}}
+    			</div>
+    		</li>
+    	</ul>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #clienteAgregar>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" style="text-transform: capitalize;">agregar Cliente</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRefAgregar.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-cliente-agregar [action]="'agregar'" (close)="actualizarListaClientes();modalRefAgregar.hide()"></app-cliente-agregar>
+  </div>
+</ng-template>
+
+<ng-template #completarPop>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" style="text-transform: capitalize;">Confirmar Factura</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRefCompletar.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="col-12 confirmar-items">
+    	<div class="row">
+    		<div class="col-3">
+    			Cliente
+    		</div>
+    		<div class="col-9">
+    			<span class="client-display" *ngIf="factura.comprador.nombre != ''">
+					{{factura.comprador.nombre}} {{factura.comprador.apellido1}} - {{factura.comprador.cedula}} <span (click)="seleccionarCliente(template)" class="client-display no-client"><span>Cambiar Cliente</span></span>
+				</span>
+				<span class="client-display no-client" *ngIf="factura.comprador.nombre == ''">
+					Factura sin cliente <span (click)="seleccionarCliente(template)">Seleccionar Cliente</span>
+				</span>
+    		</div>
+    	</div>
+    	<div class="row">
+    		<div class="col-3">
+    			Total
+    		</div>
+    		<div class="col-9">
+    			{{totalComprobante() | number:'1.2-2'}}
+    		</div>
+    	</div>
+    	<div class="row">
+    		<div class="col-3">
+    			Tipo de pago
+    		</div>
+    		<div class="col-9">
+    			<select [(ngModel)]="factura.tipo_de_pago" name="tipo_de_pago" class="form-control"> 
+				    <option value="efectivo" selected="">Efectivo</option>
+				    <option value="tarjeta">Tarjeta</option>
+				    <option value="notacredito">Nota de Credito</option>
+				</select>
+    		</div>
+    	</div>
+    	<div class="row" *ngIf="factura.tipo_de_pago == 'tarjeta'">
+    		<div class="col-3">
+    			Comprobante
+    		</div>
+    		<div class="col-9">
+    			<input type="text" [(ngModel)]="factura.comprobante" name="comprobante" class="form-control"> 
+    		</div>
+    	</div>
+    	<p *ngIf="errorDisplay" class="error">{{errorDisplay}}</p>
+		<div>
+			<button type="submit" class="btn btn-success" (click)="completarFactura(agotadosPop)" [disabled]="enviandoMH" *ngIf="factura.estado != 'enviada'">
+				<span *ngIf="!enviandoMH">Completar</span>
+				<span *ngIf="enviandoMH">Enviando...</span>
+			</button>
+			<button type="submit" class="btn btn-success" (click)="enviarFactura(agotadosPop)" *ngIf="factura.estado == 'enviada'">
+				<span *ngIf="!enviandoMH">Enviar de nuevo</span>
+				<span *ngIf="enviandoMH">Enviando...</span>
+			</button>
+		</div>
+		<div *ngIf="enviandoMH" class="enviando">
+			<div class="comp">
+				<i class="fa fa-laptop" aria-hidden="true"></i>
+			</div>
+			<div class="fact">
+				<i class="fa fa-file-code-o" aria-hidden="true"></i>
+			</div>
+			<div class="mh">
+				<i class="fa fa-university" aria-hidden="true"></i>
+			</div>
+		</div>
+    </div>
+  </div>
+</ng-template>

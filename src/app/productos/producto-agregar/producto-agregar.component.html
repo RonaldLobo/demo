@@ -1,0 +1,183 @@
+<form (ngSubmit)="onSubmit(productoForm)" #productoForm="ngForm">
+	<div class="row">
+		<div class="col-6">
+			<div class="form-group">
+				<label for="name">Nombre</label>
+				<input type="text" class="form-control" id="name" placeholder="Nombre"
+				required
+				[(ngModel)]="producto.nombre" name="nombre"
+				#nombre="ngModel" [disabled]="action=='ver'">
+				<div [hidden]="nombre.valid || nombre.pristine" class="alert alert-danger">
+					<div *ngIf="nombre.errors && nombre.errors.required">
+						El Nombre es requerido
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="descripcion">Descripción</label>
+				<input type="text" class="form-control" id="descripcion" placeholder="Descripción"
+				[(ngModel)]="producto.descripcion" name="descripcion" #descripcion="ngModel" required [disabled]="action=='ver'">
+				<div [hidden]="descripcion.valid || descripcion.pristine" class="alert alert-danger">
+					La descripción es requerida
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="precio">Precio Sin Impuestos</label>
+				<input type="number" 
+					class="form-control" 
+					id="precio" name="precio"
+					[(ngModel)]="producto.precio"  
+					#precio="ngModel" 
+					required pattern="" [disabled]="action=='ver'">
+				<div [hidden]="precio.valid || precio.pristine" class="alert alert-danger" *ngIf="precio.errors && precio.errors.required">
+					El precio es requerido
+				</div>
+				<div [hidden]="precio.valid || precio.pristine" class="alert alert-danger" *ngIf="precio.errors && precio.errors.pattern">
+					El precio deben ser números
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="marca">Marca</label>
+				<input type="text" class="form-control" id="marca" placeholder="Marca"
+				[(ngModel)]="producto.marca" name="marca"
+				#marca="ngModel" [disabled]="action=='ver'">
+			</div>
+
+			<div class="form-group">
+				<label for="codigo">Código</label>
+				<input type="text" class="form-control" id="codigo" placeholder="Código"
+				[(ngModel)]="producto.codigo" name="codigo" #codigo="ngModel" required [disabled]="action=='ver'">
+				<div [hidden]="codigo.valid || codigo.pristine" class="alert alert-danger">
+					El código es requerido
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="impuestos">Impuestos</label>
+				<input type="number" 
+					class="form-control" 
+					id="impuestos" name="impuestos"
+					[(ngModel)]="producto.impuestos"  
+					#impuestos="ngModel" [disabled]="action=='ver'">
+				<div [hidden]="impuestos.valid || impuestos.pristine" class="alert alert-danger" *ngIf="impuestos.errors && impuestos.errors.pattern">
+					El impuestos deben ser números
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="utilidad">Utilidad</label>
+				<input type="number" 
+					class="form-control" 
+					id="utilidad" name="utilidad"
+					[(ngModel)]="producto.utilidad"  
+					#utilidad="ngModel" [disabled]="action=='ver'" (change)="actualizaPrecio()">
+				<div [hidden]="utilidad.valid || utilidad.pristine" class="alert alert-danger" *ngIf="utilidad.errors && utilidad.errors.pattern">
+					La Utilidad deben ser números
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="proveedor">Proveedor</label>
+				<input type="text" class="form-control" id="proveedor" placeholder="Proveedor"
+				[(ngModel)]="producto.proveedor" name="proveedor" #proveedor="ngModel" [disabled]="action=='ver'">
+			</div>
+			<div class="form-group">
+				<label for="ubicacion">Ubicación</label>
+				<input type="text" class="form-control" id="ubicacion" placeholder="Ubicación"
+				[(ngModel)]="producto.ubicacion" name="ubicacion" #ubicacion="ngModel" [disabled]="action=='ver'">
+			</div>
+		</div>
+		<div class="col-6">
+			<div class="form-group">
+				<label for="modelo">Modelo</label>
+				<input type="text" class="form-control" id="modelo" placeholder="Modelo"
+				[(ngModel)]="producto.modelo" name="modelo" #modelo="ngModel" [disabled]="action=='ver'">
+			</div>
+			<div class="form-group">
+				<label for="costo">Costo</label>
+				<input type="number" 
+					class="form-control" 
+					id="costo" name="costo"
+					[(ngModel)]="producto.costo"  
+					#costo="ngModel" 
+					required [disabled]="action=='ver'" (change)="actualizaPrecio()">
+				<div [hidden]="costo.valid || costo.pristine" class="alert alert-danger" *ngIf="costo.errors && costo.errors.required">
+					El costo es requerido
+				</div>
+				<div [hidden]="costo.valid || costo.pristine" class="alert alert-danger" *ngIf="costo.errors && costo.errors.pattern">
+					El costo deben ser números
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="cantidad">Cantidad Disponible</label>
+				<input type="number" 
+					class="form-control" 
+					id="cantidad" name="cantidad"
+					[(ngModel)]="producto.cantidad"  
+					#cantidad="ngModel" 
+					required [disabled]="action=='ver'">
+				<div [hidden]="cantidad.valid || cantidad.pristine" class="alert alert-danger" *ngIf="cantidad.errors && cantidad.errors.required">
+					La cantidad disponibles es requerida
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="descuento">Descuento</label>
+				<input type="number" 
+					class="form-control" 
+					id="descuento" name="descuento"
+					[(ngModel)]="producto.descuento"  
+					#descuento="ngModel" [disabled]="action=='ver'">
+				<div [hidden]="descuento.valid || descuento.pristine" class="alert alert-danger" *ngIf="descuento.errors && descuento.errors.pattern">
+					El descuento deben ser números
+				</div>
+			</div>
+
+			<div class="form-group" *ngIf="producto.descuento && producto.descuento > 0">
+				<label for="descuento_tipo">Tipo de descuento </label>
+				<select [(ngModel)]="producto.descuento_tipo" name="descuento_tipo" class="form-control" [disabled]="action=='ver'"> 
+				    <option value="1" selected="">Colones</option>
+				    <option value="2">%</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="categoria">Categoría </label>
+				<select [(ngModel)]="producto.categoria" name="categoria" class="form-control" [disabled]="action=='ver'"> 
+				    <option value="1" selected="">Repuesto</option>
+				    <option value="2">Nuevo</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="estado">Estado </label>
+				<select [(ngModel)]="producto.estado" name="estado" class="form-control" [disabled]="action=='ver'"> 
+				    <option value="true" selected="">Activo</option>
+				    <option value="false">Pendiente</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+				<label for="unidad">Unidad </label>
+				<select [(ngModel)]="producto.unidad" name="unidad" class="form-control" [disabled]="action=='ver'"> 
+				    <option value="K" selected="">Kilo</option>
+				    <option value="L">Litro</option>
+				    <option value="Unid">Unidad</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	<p *ngIf="errorDisplay" class="error">{{errorDisplay}}</p>
+	<div *ngIf="action!='ver'">
+		<button *ngIf="action!='borrar'" type="submit" class="btn btn-success" [disabled]="!productoForm.form.valid || !canAdd">
+			<span *ngIf="action=='agregar'">Agregar</span>
+			<span *ngIf="action=='editar'">Editar</span>
+		</button>
+		<button *ngIf="action=='borrar'" type="button" class="btn btn-danger" (click)="eliminar()">
+			Eliminar
+		</button>
+		<!-- <button *ngIf="action!='borrar'" type="button" class="btn btn-danger" (click)="newProducto(); productoForm.reset()">		Deshacer cambios
+		</button> -->
+	</div>
+	<!-- <button type="button" class="btn btn-danger" (click)="newProducto(); productoForm.reset()">Eliminar</button> -->
+</form>

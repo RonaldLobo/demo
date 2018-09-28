@@ -1,0 +1,11 @@
+.producto-display{
+	margin-top: 5px;
+}
+
+.sort-elem{
+	cursor: pointer;
+}
+
+.sort-elem svg{
+	height: 10px;
+}

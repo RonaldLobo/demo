@@ -1,0 +1,130 @@
+<form (ngSubmit)="onSubmit(clienteForm)" #clienteForm="ngForm">
+	<div class="row">
+		<div class="col-xs-12 col-sm-6">
+			<div class="form-group">
+				<label for="name">Nombre</label>
+				<input type="text" class="form-control" id="name" placeholder="Nombre"
+				required
+				[(ngModel)]="cliente.nombre" name="nombre"
+				#nombre="ngModel" [disabled]="action=='ver'">
+				<div [hidden]="nombre.valid || nombre.pristine" class="alert alert-danger">
+					<div *ngIf="nombre.errors && nombre.errors.required">
+						El Nombre es requerido
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label for="name">Tipo Id Cliente</label>
+				<select [(ngModel)]="cliente.tipoId" name="tipo_cedula_emisor" class="form-control" #tipoId="ngModel" [disabled]="action=='ver'">
+					<option value="01" selected="">Física</option>
+					<option value="02">Jurídica</option>
+					<option value="03">DIMEX</option>
+					<option value="04">NITE</option>
+				</select>
+			</div>
+
+			<div class="form-group" *ngIf="cliente.tipoId != '02'">
+				<label for="apellido1">Primer Apellido</label>
+				<input type="text" class="form-control" id="name" placeholder="Nombre"
+				required
+				[(ngModel)]="cliente.apellido1" name="apellido1"
+				#apellido1="ngModel" [disabled]="action=='ver'">
+				<div [hidden]="apellido1.valid || apellido1.pristine" class="alert alert-danger">
+					<div *ngIf="apellido1.errors && apellido1.errors.required">
+						El primer apellido es requerido
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group" *ngIf="cliente.tipoId != '02'">
+				<label for="apellido2">Segundo Apellido</label>
+				<input type="text" class="form-control" id="name" placeholder="Nombre"
+				[(ngModel)]="cliente.apellido2" name="apellido2"
+				#apellido2="ngModel" [disabled]="action=='ver'">
+			</div>
+			<div class="form-group">
+				<input type="button" class="btn btn-info" (click)="buscarPorNombre()" value="Buscando..." disabled="" *ngIf="buscando">
+				<input type="button" class="btn btn-info" (click)="buscarPorNombre()" value="Buscar por nombre" *ngIf="buscando == false">
+				<ul>
+					<li *ngFor="let cli of posiblesClientes" (click)=selectCliente(cli)>
+						* {{cli.nombre}} {{cli.apellido1}} {{cli.apellido2}} ced: {{cli.cedula}}
+					</li>
+				</ul>
+			</div>
+			<div class="form-group">
+				<label for="cedula">Cedula</label>
+				<input type="text" placeholder="102340671" 
+					class="form-control" 
+					id="cedula" name="cedula"
+					[(ngModel)]="cliente.cedula"  
+					#cedula="ngModel" 
+					required pattern="[0-9]*" minlength="9" maxlength="15" [disabled]="action=='ver'">
+				<div [hidden]="cedula.valid || cedula.pristine" class="alert alert-danger" *ngIf="cedula.errors && cedula.errors.required">
+					La Cedula es requerida
+				</div>
+				<div [hidden]="cedula.valid || cedula.pristine" class="alert alert-danger" *ngIf="cedula.errors && cedula.errors.pattern">
+					La Cedula debe ser compuesta solo de números.
+				</div>
+				<div [hidden]="cedula.valid || cedula.pristine" class="alert alert-danger" *ngIf="cedula.errors && cedula.errors.minlength">
+					La Cedula debe ser de minimo 9 digitos.
+				</div>
+			</div>
+			<div class="form-group">
+				<input type="button" class="btn btn-info" (click)="buscarPorCedula()" disabled="" value="Buscando..." *ngIf="buscando">
+				<input type="button" class="btn btn-info" (click)="buscarPorCedula()" value="Buscar por cédula" *ngIf="buscando == false">
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div class="form-group">
+				<label for="cantidad">Telefonos</label>
+				<div class="input-group mb-3">
+					<input type="text" class="form-control" placeholder="Telefono" aria-label="Telefonos" aria-describedby="basic-addon2" [(ngModel)]="newPhone"  
+					#phone="ngModel" name="phone" pattern="[0-9]*" minlength="8" maxlength="8" [disabled]="action=='ver'">
+					<div class="input-group-append">
+						<span class="input-group-text" id="basic-addon2" (click)="(action=='agregar' || action=='editar') && newPhone && phone.valid && addPhone()" style="padding-top: 6px;padding-bottom: 1px;" tooltip="Agregar telefono.">
+							<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></g></svg>
+						</span>
+					</div>
+				</div>
+				<div [hidden]="phone.valid || phone.pristine" class="alert alert-danger" *ngIf="phone.errors && phone.errors.pattern">
+					El telefono debe ser compuesto solo de números.
+				</div>
+				<div [hidden]="phone.valid || phone.pristine" class="alert alert-danger" *ngIf="phone.errors && phone.errors.minlength">
+					El telefono debe ser de minimo 8 digitos.
+				</div>
+			</div>
+			<div class="form-group" style="min-height: 149px;">
+				<span>Telefonos:</span>
+				<ul>
+					<li *ngFor="let telefono of cliente.telefonos">{{telefono.telefono}} <button class="btn btn-link" (click)="quitarTelefono(telefono)" *ngIf="action=='agregar' || action=='editar'">Quitar</button></li>
+				</ul>
+				<p *ngIf="cliente.telefonos.length == 0" style="color:red;">Agregue telefonos para el cliente.</p>
+			</div>
+			<div class="form-group">
+				<label for="email">Correo</label>
+				<input type="email" 
+					class="form-control" 
+					id="email" name="email"
+					[(ngModel)]="cliente.correo.correo"  
+					#email="ngModel" email [disabled]="action=='ver'">
+				<div [hidden]="email.valid || email.pristine" class="alert alert-danger" *ngIf="email.errors && email.errors.email">
+					Revise el formato del correo.
+				</div>
+			</div>
+		</div>
+	</div>
+	<p *ngIf="errorDisplay" class="error">{{errorDisplay}}</p>
+	<div *ngIf="action!='ver'">
+		<button *ngIf="action!='borrar'" type="submit" class="btn btn-success" [disabled]="!clienteForm.form.valid || !canAdd || cliente.telefonos.length == 0">
+			<span *ngIf="action=='agregar'">Agregar</span>
+			<span *ngIf="action=='editar'">Editar</span>
+		</button>
+		<button *ngIf="action=='borrar'" type="button" class="btn btn-danger" (click)="eliminar()">
+			Eliminar
+		</button>
+		<!-- <button *ngIf="action!='borrar'" type="button" class="btn btn-danger" (click)="newCliente(); clienteForm.reset()">		Deshacer cambios
+		</button> -->
+	</div>
+	<!-- <button type="button" class="btn btn-danger" (click)="newCliente(); clienteForm.reset()">Eliminar</button> -->
+</form>

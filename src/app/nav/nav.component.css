@@ -1,0 +1,31 @@
+
+.active {
+	color: #0056b3;
+	text-decoration: underline;
+}
+
+.routes {
+	padding-top: 7px;
+}
+
+.social a {
+	color: black;
+	font-size: 30px;
+	margin-left: 10px;
+}
+
+#navbar-items{
+	padding-left: 27px;
+}
+
+.action{
+	margin-right: 20px;
+}
+
+.confirmar-items .row{
+	margin-bottom: 25px;
+}
+
+.nav-item a{
+	color: white;
+}

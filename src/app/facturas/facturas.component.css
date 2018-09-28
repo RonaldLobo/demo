@@ -1,0 +1,130 @@
+.search-results{
+	padding-left: 0; 
+	margin-top:20px;
+}
+
+.search-results li{
+	margin-top: 7px;
+	margin-bottom: 8px;
+	border-bottom: 1px solid gray;
+}
+
+.search-results li div{
+	/*white-space: nowrap;*/
+  	/*overflow: hidden;*/
+  	/*text-overflow: ellipsis;*/
+}
+
+input{
+	max-width: 100%;
+}
+
+.seleccionar{
+    padding: 0;
+    text-decoration:  underline;
+}
+
+.totales{
+	padding-left: 0;
+    margin-left: 15px;
+}
+
+.totales .item{
+	margin-bottom: 10px;
+}
+
+.ultimo{
+	border-bottom: 1px solid black;
+    padding-bottom: 20px;
+}
+
+.products-list{
+	border: 1px solid gray;
+    border-radius: 10px;
+    margin-right: 5px;
+}
+
+.list-products{
+	height: 500px;
+    overflow-y: scroll;
+}
+
+.client-display{
+	font-weight: bold;
+}
+
+.no-client{
+	color: red;
+}
+
+.no-client span{
+	color:#007bff;
+}
+
+.no-client span:hover{
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.confirmar-items .row{
+	margin-bottom: 20px;
+}
+
+.invisible{
+	/*visibility: hidden;*/
+	height: 0px !important;
+	overflow: hidden;
+}
+
+ul{
+	padding-left: 0;
+}
+
+.agotado-item{
+	padding-bottom: 6px;
+	padding-top: 6px;
+	border-bottom: 1px solid black
+}
+
+.stay-in-box{
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.enviando{
+	position: relative;
+    margin-top: 20px;
+    height: 60px;
+}
+
+.comp{
+	font-size: 25px;
+	position: absolute;
+    left: 8%;
+    /*top: 20px;*/
+}
+
+.fact{
+	font-size: 19px;
+	position: absolute;
+    left: 50%;
+    /*top: 20px;*/
+    -webkit-animation: run 7s infinite; /* Safari 4+ */
+	-moz-animation:    run 7s infinite; /* Fx 5+ */
+	-o-animation:      run 7s infinite; /* Opera 12+ */
+	animation:         run 7s infinite; /* IE 10+, Fx 29+ */
+}
+
+.mh{
+	font-size: 25px;
+	position: absolute;
+    right: 8%;
+    /*top: 20px;*/
+}
+
+@keyframes run {
+    0%  { left: 15%;}
+    50% { left : 82%;}
+    100%{ left: 15%;}
+}

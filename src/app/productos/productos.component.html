@@ -1,0 +1,118 @@
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+		<h1 class="h2">Productos</h1>
+		<div class="btn-toolbar mb-2 mb-md-0">
+			<div class="btn-group mr-2">
+				<button (click)="agregar(template)" class="btn btn-sm btn-outline-secondary"><svg _ngcontent-c3="" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" height="24" preserveAspectRatio="xMidYMid meet" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g _ngcontent-c3="" fill="none" stroke="#626262" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path _ngcontent-c3="" d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><path _ngcontent-c3="" d="M17 21v-8H7v8"></path><path _ngcontent-c3="" d="M7 3v5h8"></path></g><rect _ngcontent-c3="" fill="rgba(0, 0, 0, 0)" height="24" width="24" x="0" y="0"></rect></svg> <p _ngcontent-c3="" style="display: block;margin-top: -7px !important;margin-bottom: 4px;">Agregar</p></button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="row col-12" style="padding-bottom: 26px;">
+			<div class="col-4">
+				Buscar por código:
+				<input type="text" name="txtCodigo" id="buscarPorCodigo" [(ngModel)]="codigo" (ngModelChange)="changedCodigo()" placeholder="Buscar por código" tabindex="1">
+			</div>
+			<div class="col-4">
+				Buscar por producto:
+				<input type="text" name="txtProducto" [(ngModel)]="nombreProducto" (ngModelChange)="changedNombre()" placeholder="Buscar por Nombre" tabindex="2">
+			</div>
+			<div class="col-4">
+				Buscar por modelo:
+				<input type="text" name="txtModelo" [(ngModel)]="modeloProducto" (ngModelChange)="changedModelo()" placeholder="Buscar por Modelo" tabindex="2">
+			</div>
+		</div>
+		<pagination-controls
+			class="pagination"
+			previousLabel="Previo"
+            nextLabel="Siguiente"
+			(pageChange)="p = $event">
+		</pagination-controls>
+		<ul class="col-12 items-list">
+			<li>
+				<div class="col-12 row">
+					<div class="col-2">
+						<p (click)="orderBy('nombre')" class="sort-elem">Nombre <br>
+							<span *ngIf="order=='nombre'" class="sort">
+								<span *ngIf="reverse == true">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></g></svg>
+								</span>
+								<span *ngIf="reverse == false">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></g></svg>
+								</span>
+							</span>
+						</p>
+					</div>
+					<div class="col-2 text-center">
+						<p (click)="orderBy('marca')" class="sort-elem">Marca <br>
+							<span *ngIf="order=='marca'" class="sort">
+								<span *ngIf="reverse == true">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></g></svg>
+								</span>
+								<span *ngIf="reverse == false">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></g></svg>
+								</span>
+							</span>
+						</p>
+					</div>
+					<div class="col-2 text-center">
+						<p (click)="orderBy('cantidad')" class="sort-elem">Cantidad <br>
+							<span *ngIf="order=='cantidad'" class="sort">
+								<span *ngIf="reverse == true">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></g></svg>
+								</span>
+								<span *ngIf="reverse == false">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></g></svg>
+								</span>
+							</span>
+						</p>
+					</div>
+					<div class="col-1 text-center">
+						<p (click)="orderBy('precio')" class="sort-elem">Precio <br>
+							<span *ngIf="order=='precio'" class="sort">
+								<span *ngIf="reverse == true">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></g></svg>
+								</span>
+								<span *ngIf="reverse == false">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></g></svg>
+								</span>
+							</span>
+						</p>
+					</div>
+					<div class="col-1 text-center">
+						<p (click)="orderBy('modelo')" class="sort-elem">Modelo<br>
+							<span *ngIf="order=='modelo'" class="sort">
+								<span *ngIf="reverse == true">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></g></svg>
+								</span>
+								<span *ngIf="reverse == false">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></g></svg>
+								</span>
+							</span>
+						</p>
+					</div>
+					<div class="col-4 text-center">
+						<p>
+							Acciones
+				        </p>
+					</div>
+				</div>
+			</li>
+			<li *ngFor="let producto of productos | paginate: { itemsPerPage: 10, currentPage: p }; index as i" class="" [class.pair]="i%2==0">
+				<app-producto-display [producto]='producto' (borrarProducto)="borrarProducto($event)" (editarProducto)="editarProducto($event)" (actualizarLista)="actualizarLista($event)" class=""></app-producto-display>
+			</li>
+		</ul>
+	</div>
+</main>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" style="text-transform: capitalize;">{{action}} Producto</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-producto-agregar [action]="action" (close)="actualizarLista();modalRef.hide()"></app-producto-agregar>
+  </div>
+</ng-template>

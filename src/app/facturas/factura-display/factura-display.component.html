@@ -1,0 +1,52 @@
+<div class="col-12 row">
+	<div class="col-6 col-sm-2" *ngIf="productofacturaitem.producto.codigo != '0000'">
+		<p (click)="ver(template)" class="ver-producto">{{productofacturaitem.producto.nombre}} - {{productofacturaitem.producto.marca}}</p>
+	</div>
+	<div class="col-6 col-sm-2" *ngIf="productofacturaitem.producto.codigo == '0000'">
+		<p class="ver-producto">
+			<input type="type" name="nombre" [(ngModel)]="productofacturaitem.producto.nombre" style="width: 100px" [disabled]="estado == 'completa' || estado == 'enviada'">
+		</p>
+	</div>
+	<div class="col-2 text-center d-none d-sm-block" *ngIf="productofacturaitem.producto.codigo != '0000'" >
+		<p>{{productofacturaitem.producto.precio | number:'1.2-2'}}<span *ngIf="productofacturaitem.producto.impuestos">*</span></p>
+	</div>
+	<div class="col-2 text-center d-none d-sm-block" *ngIf="productofacturaitem.producto.codigo == '0000'">
+		<input type="number" name="nombre" [(ngModel)]="productofacturaitem.producto.precio" class="factura-cambio" (focusout)="fueraPrecio($event)" [disabled]="estado == 'completa' || estado == 'enviada'">
+	</div>
+	<div class="col-2 text-center d-none d-sm-block">
+		<input type="number" name="cantidad" class="factura-cambio" [(ngModel)]="productofacturaitem.cantidad" (focusout)="fueraCantidad()" [disabled]="estado == 'completa' || estado == 'enviada'" style="width: 80%;">
+	</div>
+	<div class="col-2 text-center d-none d-sm-block">
+		<input type="number" name="descuento" class="factura-cambio" [(ngModel)]="productofacturaitem.descuento" (focusout)="fueraDescuento()" [disabled]="estado == 'completa' || estado == 'enviada'" style="width: 80%;">
+	</div>
+	<div class="col-2 text-center d-none d-sm-block">
+		<select [(ngModel)]="productofacturaitem.descuento_tipo" (focusout)="fueraDescuentoTipo()" name="descuento_tipo" class="form-control small-select" [disabled]="estado == 'completa' || estado == 'enviada'" style="width: 80%; padding: 0;"> 
+		    <option value="1">Colones</option>
+		    <option value="2">%</option>
+		</select>
+	</div>
+	<div class="col-6 col-sm-2 text-center">
+		<p class="action" *ngIf="estado != 'completa' && estado != 'enviada'">
+	        <button class="btn btn-sm btn-outline-secondary delete" (click)="borrar()" tooltip="Eliminar de la lista.">
+	        	<span class="icon">
+	          		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><path d="M18 9l-6 6"/><path d="M12 9l6 6"/></g></svg>
+	          	</span>
+	          	<span class="label">
+	          		Eliminar
+	        	</span>
+	        </button>
+        </p>
+	</div>
+</div>
+ 
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left" style="text-transform: capitalize;">Ver Producto</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-producto-agregar [action]="'ver'" [selectedProduct]="copy" (close)="actualizar();modalRef.hide();"></app-producto-agregar>
+  </div>
+</ng-template>

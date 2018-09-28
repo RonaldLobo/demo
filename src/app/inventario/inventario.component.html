@@ -1,0 +1,99 @@
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+		<h1 class="h2">Inventario</h1>
+		<div class="btn-toolbar mb-2 mb-md-0">
+			
+		</div>
+	</div>
+	<div class="row">
+		<div class="row col-12" style="padding-bottom: 26px;">
+			<div class="col-4">
+				Buscar por código:
+				<input type="text" name="txtCodigo" id="buscarPorCodigo" [(ngModel)]="codigo" (ngModelChange)="changedCodigo()" placeholder="Buscar por código" tabindex="1">
+			</div>
+			<div class="col-4">
+				Buscar por producto:
+				<input type="text" name="txtProducto" [(ngModel)]="nombreProducto" (ngModelChange)="changedNombre()" placeholder="Buscar por Nombre" tabindex="2">
+			</div>
+			<div class="col-4">
+				Buscar por modelo:
+				<input type="text" name="txtModelo" [(ngModel)]="modeloProducto" (ngModelChange)="changedModelo()" placeholder="Buscar por Modelo" tabindex="2">
+			</div>
+		</div>
+		<div class="row col-12" *ngIf="productos && productos.length > 1">
+			<ul>
+				<li class="row col-12">
+					<div class="col-4">
+						Nombre
+					</div>
+					<div class="col-2">
+						Código
+					</div>
+					<div class="col-2">
+						Modelo
+					</div>
+					<div class="col-4">
+						Acción
+					</div>
+				</li>
+				<li *ngFor="let producto of productos" class="row col-12">
+					<div class="col-4">
+						{{producto.nombre}}
+					</div>
+					<div class="col-2">
+						{{producto.codigo}}
+					</div>
+					<div class="col-2">
+						{{producto.modelo}}
+					</div>
+					<div class="col-4" (click)="selectedProduct = producto; productos = [];" style="cursor:pointer;">
+						<span style="text-decoration: underline;">Seleccionar</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+
+		<div class="row col-12" *ngIf="selectedProduct && (selectedProduct.nombre || selectedProduct.codigo || selectedProduct.modelo)">
+			<div class="col-12">
+				<h3>Producto:</h3>
+			</div>
+			<br>
+			<div class="row col-12">
+				<div class="col-4">
+					Nombre
+				</div>
+				<div class="col-2">
+					Codigo
+				</div>
+				<div class="col-2">
+					Modelo
+				</div>
+				<div class="col-2">
+					Cantidad Disponible
+				</div>
+			</div>
+			<div class="row col-12">
+				<div class="col-4">
+					{{selectedProduct.nombre}}
+				</div>
+				<div class="col-2">
+					{{selectedProduct.codigo}}
+				</div>
+				<div class="col-2">
+					{{selectedProduct.modelo}}
+				</div>
+				<div class="col-2">
+					<input type="number" name="cantidad" [(ngModel)]="selectedProduct.cantidad">
+				</div>
+			</div>
+			<div class="row col-12">
+				<div class="col-12 text-center">
+					<br>
+					<button class="btn btn-success" disabled="" *ngIf="actualizando">Actualizando</button>
+					<button class="btn btn-success" (click)="actualizar()" *ngIf="!actualizando">Actualizar Cantidad Disponible</button>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</main>

@@ -1,0 +1,11 @@
+.actions {
+	margin-top: 8px;
+}
+
+.actions .text-center {
+	margin-bottom: 5px;
+}
+
+.actions .text-center button{
+	width: 85px;
+}

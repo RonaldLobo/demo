@@ -1,0 +1,14 @@
+.cliente-display{
+	margin-top: 5px;
+}
+
+.sort svg{
+	height: 15px;
+	/*position: absolute;
+	top: 10px;
+	left: 90px;*/
+}
+
+.sort-item{
+	cursor: pointer;
+}

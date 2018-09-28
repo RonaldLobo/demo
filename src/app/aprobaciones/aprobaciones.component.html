@@ -1,0 +1,119 @@
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+	<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+		<h1 class="h2">Aprobaciones</h1>
+		<div class="btn-toolbar mb-2 mb-md-0">
+			<div class="btn-group mr-2">
+				<button class="btn btn-sm btn-outline-secondary" (click)="goTo('/aprobar')"><svg _ngcontent-c3="" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" height="24" preserveAspectRatio="xMidYMid meet" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><g _ngcontent-c3="" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path _ngcontent-c3="" d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><path _ngcontent-c3="" d="M17 21v-8H7v8"></path><path _ngcontent-c3="" d="M7 3v5h8"></path></g><rect _ngcontent-c3="" fill="rgba(0, 0, 0, 0)" height="24" width="24" x="0" y="0"></rect></svg> <p _ngcontent-c3="" style="display: block;margin-top: -7px !important;margin-bottom: 4px;">Aprobar</p></button>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<pagination-controls
+			class="pagination"
+			previousLabel="Previo"
+            nextLabel="Siguiente"
+			(pageChange)="p = $event">
+		</pagination-controls>
+		<ul class="col-12 items-list">
+			<li class="">
+				<div class="col-12 row">
+					<div class="col-sm-2 col-6">
+						<p (click)="orderBy('numero_cedula_emisor')" class="sort-item">Emisor
+							<span *ngIf="order=='numero_cedula_emisor'" class="sort">
+								<span *ngIf="reverse == true">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></g></svg>
+								</span>
+								<span *ngIf="reverse == false">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></g></svg>
+								</span>
+							</span>
+						</p>
+					</div>
+					<div class="col-sm-2 d-none d-sm-block text-center">
+						<p (click)="orderBy('fecha_emision_doc')" class="sort-item">Fecha
+							<span *ngIf="order=='fecha_emision_doc'" class="sort">
+								<span *ngIf="reverse == true">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></g></svg>
+								</span>
+								<span *ngIf="reverse == false">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></g></svg>
+								</span>
+							</span>
+						</p>
+					</div>
+					<div class="col-sm-2 d-none d-sm-block text-center">
+						<p (click)="orderBy('mensaje')" class="sort-item">Mensaje
+							<span *ngIf="order=='mensaje'" class="sort">
+								<span *ngIf="reverse == true">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></g></svg>
+								</span>
+								<span *ngIf="reverse == false">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></g></svg>
+								</span>
+							</span>
+						</p>
+					</div>
+					<div class="col-sm-2 d-none d-sm-block text-center">
+						<p (click)="orderBy('estado')" class="sort-item">Estado
+							<span *ngIf="order=='estado'" class="sort">
+								<span *ngIf="reverse == true">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></g></svg>
+								</span>
+								<span *ngIf="reverse == false">
+									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M19 12l-7 7-7-7"/></g></svg>
+								</span>
+							</span>
+						</p>
+					</div>
+					<div class="col-sm-4 col-6 text-center">
+						<p>
+							Acciones
+				        </p>
+					</div>
+				</div>
+			</li>
+			<li *ngFor="let aceptar of aceptaciones | paginate: { itemsPerPage: 10, currentPage: p }; index as i" class="" [class.odd]="i%2==0">
+				<div class="col-12 row">
+					<div class="col-sm-2 col-6">
+						<p>
+							{{aceptar.numero_cedula_emisor}}
+						</p>
+					</div>
+					<div class="col-sm-2 d-none d-sm-block text-center">
+						<p>
+							{{aceptar.fecha_emision_doc | date: 'dd/MM/yyyy'}}
+						</p>
+					</div>
+					<div class="col-sm-2 d-none d-sm-block text-center">
+						<p *ngIf="aceptar.mensaje == 1">
+							Aprobada
+						</p>
+						<p *ngIf="aceptar.mensaje == 2">
+							A. Parcialmente
+						</p>
+						<p *ngIf="aceptar.mensaje == 3">
+							Rechadada
+						</p>
+					</div>
+					<div class="col-sm-2 d-none d-sm-block text-center">
+						<p>
+							{{aceptar.estado}}
+						</p>
+					</div>
+					<div class="col-sm-4 col-6 text-center">
+						<p class="action">
+							<button class="btn btn-sm btn-outline-secondary" (click)="verAceptacion(aceptar._id)" tooltip="Ver información de la aceptación.">
+					        	<span class="icon">
+					          		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" width="24" height="24" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></g></svg>
+					          	</span>
+					          	<span class="label">
+					          		Ver
+					        	</span>
+					        </button>
+				        </p>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</main>
