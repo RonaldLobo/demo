@@ -17,7 +17,7 @@ import 'rxjs/add/observable/throw';
 @Injectable()
 export class DataService {
     // public host = '';
-    public host = 'http://solhidra.com:8080';
+    public host = 'http://18.224.29.123:8080';
     // public host = 'http://kyrapps.com:9008';
     constructor(
         public http: Http
